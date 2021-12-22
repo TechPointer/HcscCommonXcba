@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    stages {
+        stage ('Clean workspace') {
+          steps {
+            cleanWs()
+          }
+        }
+        stage ('Git Checkout') {
+          steps {
+              git branch: 'main', credentialsId: '71abc431-9ea1-4518-a894-900974339301', poll: false, url: 'https://github.com/Elumalai04/DotNet_HCSC.git'
+            }
+        }
+        stage ('Restore Nuget') {
+          steps {
+              echo "restoring Nuget..."
+              bat 'dotnet restore'
+
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building..'
+                msbuild(msBuildName: 'console app', 
+                msBuildFile : 'HcscCommonXcba.sln', 
+                cmdLineArgs: '', 
+                continueOnBuildFailure : false,
+                doNotUseChcpCommand : false,
+                buildVariablesAsProperties : false,
+                unstableIfWarnings : false )
+             }
+        }
+        stage('Test') {
+            steps {
+               bat 'echo "Testing"'
+            }
+        }
+        stage('Archive') {
+            steps {
+                echo 'Archive....'
+                //archiveArtifacts artifacts: 'bin/*.dll', followSymlinks: false
+            }
+        }
+        stage('Publish') {
+            steps {
+                echo 'Publish to Nexus....'
+                //nexusArtifactUploader artifacts: [[artifactId: '1.1', classifier: 'custom app', file: 'test.zip', type: 'zip']], credentialsId: '', groupId: 'HCSC', nexusUrl: 'localhost', nexusVersion: 'nexus2', protocol: 'http', repository: 'FacetsRepo', version: '1.1'
+            }
+        }
+    }
+}
