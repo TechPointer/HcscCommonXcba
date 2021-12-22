@@ -9,7 +9,7 @@ pipeline {
         }
         stage ('Git Checkout') {
           steps {
-              git branch: 'main', credentialsId: '71abc431-9ea1-4518-a894-900974339301', poll: false, url: 'https://github.com/Elumalai04/DotNet_HCSC.git'
+                git branch: 'main', credentialsId: 'Github_Cred', url: 'https://github.com/TechPointer/HcscCommonXcba.git'
             }
         }
         stage ('Restore Nuget') {
