@@ -9,7 +9,7 @@ pipeline {
         }
         stage ('Git Checkout') {
           steps {
-                git branch: 'main', credentialsId: 'Github_Cred', url: 'https://github.com/TechPointer/HcscCommonXcba.git'
+                git branch: 'main', credentialsId: 'Github_Cred', poll: false, url: 'https://github.com/TechPointer/HcscCommonXcba.git'
             }
         }
         stage ('Restore Nuget') {
